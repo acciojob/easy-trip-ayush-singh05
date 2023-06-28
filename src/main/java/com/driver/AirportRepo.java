@@ -23,10 +23,10 @@ public class AirportRepo {
     HashMap<Integer, Set<Integer>>ticketDB = new HashMap<>();
 
 
-    public void addAirport(Airport airport) throws Exception {
+    public void addAirport(Airport airport)  {
         City name = airport.getCity();
         if(airportDB.containsKey(name)){
-            throw new Exception("Already Exist!");
+           return;
         }
         airportDB.put(name,airport);
     }
@@ -49,18 +49,18 @@ public class AirportRepo {
 
     }
 
-    public void addFlight(Flight flight) throws Exception {
+    public void addFlight(Flight flight)  {
         int id = flight.getFlightId();
         if(flightDB.containsKey(id)) {
-            throw new Exception("Flight Already Exixts!");
+            return;
         }
         flightDB.put(id,flight);
     }
 
-    public void addPassenger(Passenger passenger) throws Exception{
+    public void addPassenger(Passenger passenger) {
         int passengerId = passenger.getPassengerId();
         if(passangerdDB.containsKey(passengerId)){
-            throw new Exception("Passenger Already Exist");
+            return;
         }
         passangerdDB.put(passengerId,passenger);
     }

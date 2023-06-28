@@ -22,7 +22,7 @@ public class AirportController {
     AirportService airportService;
 
     @PostMapping("/add_airport")
-    public String addAirport(@RequestBody Airport airport) throws Exception {
+    public String addAirport(@RequestBody Airport airport) {
 
         //Simply add airport details to your database
         //Return a String message "SUCCESS"
@@ -102,7 +102,7 @@ public class AirportController {
     }
 
     @PostMapping("/add-flight")
-    public String addFlight(@RequestBody Flight flight) throws Exception {
+    public String addFlight(@RequestBody Flight flight)  {
 
         //Return a "SUCCESS" message string after adding a flight.
         airportService.addFlight(flight);
@@ -133,7 +133,7 @@ public class AirportController {
 
 
     @PostMapping("/add-passenger")
-    public String addPassenger(@RequestBody Passenger passenger) throws Exception {
+    public String addPassenger(@RequestBody Passenger passenger)  {
 
         //Add a passenger to the database
         //And return a "SUCCESS" message if the passenger has been added successfully.

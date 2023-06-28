@@ -18,15 +18,15 @@ public class AirportService {
         return airportRepo.getLargestAirportName();
     }
 
-    public void addAirport(Airport airport) throws Exception {
+    public void addAirport(Airport airport)  {
         airportRepo.addAirport(airport);
     }
 
-    public void addFlight(Flight flight) throws Exception {
+    public void addFlight(Flight flight)  {
         airportRepo.addFlight(flight);
     }
 
-    public void addPassenger(Passenger passenger) throws Exception{
+    public void addPassenger(Passenger passenger) {
         airportRepo.addPassenger(passenger);
     }
 
