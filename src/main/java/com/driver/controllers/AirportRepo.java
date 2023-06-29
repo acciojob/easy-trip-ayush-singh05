@@ -109,8 +109,11 @@ public class AirportRepo {
             return null;
         }
         String ct = String.valueOf(fl.getFromCity());
-        if(airportDB.containsKey(ct)){
-            return airportDB.get(ct).getAirportName();
+        for (String aiport : airportDB.keySet()) {
+            Airport ar = airportDB.get(aiport);
+            if(ar.getCity().equals(flightDB.get(flightId).getFromCity())) {
+                return ar.getAirportName();
+            }
         }
         return null;
     }
