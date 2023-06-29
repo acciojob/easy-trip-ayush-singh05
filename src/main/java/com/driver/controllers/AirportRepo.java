@@ -1,4 +1,4 @@
-package com.driver;
+package com.driver.controllers;
 
 import com.driver.controllers.AirportController;
 import com.driver.model.Airport;
@@ -17,14 +17,14 @@ import java.util.Set;
 
 @Repository
 public class AirportRepo {
-    HashMap<City, Airport> airportDB = new HashMap<>();
+    HashMap<String, Airport> airportDB = new HashMap<>();
     HashMap<Integer,Flight> flightDB = new HashMap<>();
     HashMap<Integer,Passenger> passangerdDB = new HashMap<>();
     HashMap<Integer, Set<Integer>>ticketDB = new HashMap<>();
 
 
     public void addAirport(Airport airport)  {
-        City name = airport.getCity();
+        String name = airport.getAirportName();
         if(airportDB.containsKey(name)){
            return;
         }
@@ -33,7 +33,7 @@ public class AirportRepo {
     public  String getLargestAirportName() {
         String airport_name = "";
         int largest = 0;
-        for(City ct : airportDB.keySet()) {
+        for(String ct : airportDB.keySet()) {
             Airport ap = airportDB.get(ct);
             if(ap.getNoOfTerminals() > largest){
                 airport_name = ap.getAirportName();
@@ -51,22 +51,20 @@ public class AirportRepo {
 
     public void addFlight(Flight flight)  {
         int id = flight.getFlightId();
-        if(flightDB.containsKey(id)) {
-            return;
+        if(!flightDB.containsKey(id)) {
+            flightDB.put(id,flight);
         }
-        flightDB.put(id,flight);
     }
 
     public void addPassenger(Passenger passenger) {
         int passengerId = passenger.getPassengerId();
-        if(passangerdDB.containsKey(passengerId)){
-            return;
+        if(!passangerdDB.containsKey(passengerId)){
+            passangerdDB.put(passengerId,passenger);
         }
-        passangerdDB.put(passengerId,passenger);
     }
 
     public double getShortestDurationOfPossibleBetweenTwoCities(City fromCity, City toCity) {
-        double sortestDur = 25.5;
+        double sortestDur = Double.MAX_VALUE;
         boolean flag = true;
         for(int key : flightDB.keySet()) {
             Flight fl = flightDB.get(key);
@@ -99,13 +97,17 @@ public class AirportRepo {
     }
 
     public String cancelATicket(Integer flightId, Integer passengerId) {
-        if(ticketDB.containsKey(flightId)) {
-            if(ticketDB.get(flightId).contains(passengerId))
-               ticketDB.get(flightId). remove(passengerId);
-               return "SUCCESS";
-        }else {
+        if(ticketDB.get(flightId)== null){
             return "FAILURE";
         }
+        if(ticketDB.containsKey(flightId)) {
+            if(ticketDB.get(flightId).contains(passengerId)) {
+                ticketDB.get(flightId).remove(passengerId);
+                return "SUCCESS";
+            }
+        }
+            return "FAILURE";
+
     }
 
     public String getAirportNameFromFlightId(Integer flightId) {
@@ -113,7 +115,7 @@ public class AirportRepo {
         if(fl == null){
             return null;
         }
-        City ct = fl.getFromCity();
+        String ct = String.valueOf(fl.getFromCity());
         if(airportDB.containsKey(ct)){
             return airportDB.get(ct).getAirportName();
         }
@@ -126,13 +128,43 @@ public class AirportRepo {
     }
 
     public int getNumberOfPeopleOn(Date date, String airportName) {
-//        for(City city : airportDB.keySet()) {
-//            Airport ap = airportDB.get(city);
-//            if(ap.getAirportName().equals(airportName)) {
-//
-//            }
-//        }
-        return 0;
+        Airport airport = airportDB.get(airportName);
+        if(airport==null)
+            return 0;
+
+        String cityName = String.valueOf(airport.getCity());
+        int sum = 0;
+
+        if(passangerdDB.isEmpty())
+            return 0;
+
+        for(int flightId: passangerdDB.keySet()){
+
+            Flight flight = flightDB.get(flightId);
+
+            if(flight==null)
+                continue;
+
+
+            if(!flight.getFlightDate().equals(date)){
+                continue;
+            }
+
+            String fCity = String.valueOf(flight.getFromCity());
+            String tCity = String.valueOf(flight.getToCity());
+
+            if(!fCity.equals(cityName) && !tCity.equals(cityName)) {
+                continue;
+            }
+            if(ticketDB.get(flightId)==null) {
+                continue;
+            }
+            sum+= ticketDB.get(flightId).size();
+
+
+        }
+        return sum;
+
     }
 
     public int countOfBookingsDoneByPassengerAllCombined(Integer passengerId) {
@@ -147,12 +179,11 @@ public class AirportRepo {
     }
 
     public int calculateRevenueOfAFlight(Integer flightId) {
-        int sz = ticketDB.get(flightId).size();
-        int rate = 3000 * sz;
-        int total_revenue = 0;
-        for(int i = 0; i < sz-1 ; i++) {
-            total_revenue += 50;
-        }
-        return total_revenue+rate;
+       Set<Integer> passangerList = ticketDB.get(flightId);
+       if(passangerList == null || passangerList.size() == 0) {
+           return 0;
+       }
+        int n = passangerList.size()-1;
+        return  3000 + ((n*(n+1))/2) * 50;
     }
 }

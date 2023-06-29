@@ -1,5 +1,6 @@
-package com.driver;
+package com.driver.controllers;
 
+import com.driver.controllers.AirportRepo;
 import com.driver.model.Airport;
 import com.driver.model.City;
 import com.driver.model.Flight;
