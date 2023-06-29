@@ -13,7 +13,7 @@ import java.util.Date;
 @Service
 public class AirportService {
     @Autowired
-    AirportRepo airportRepo;
+    AirportRepo airportRepo = new AirportRepo();
 
     public String getLargestAirportName() {
         return airportRepo.getLargestAirportName();
