@@ -25,9 +25,6 @@ public class AirportRepo {
 
     public void addAirport(Airport airport)  {
         String name = airport.getAirportName();
-        if(airportDB.containsKey(name)){
-           return;
-        }
         airportDB.put(name,airport);
     }
     public  String getLargestAirportName() {
@@ -51,16 +48,12 @@ public class AirportRepo {
 
     public void addFlight(Flight flight)  {
         int id = flight.getFlightId();
-        if(!flightDB.containsKey(id)) {
             flightDB.put(id,flight);
-        }
     }
 
     public void addPassenger(Passenger passenger) {
         int passengerId = passenger.getPassengerId();
-        if(!passangerdDB.containsKey(passengerId)){
             passangerdDB.put(passengerId,passenger);
-        }
     }
 
     public double getShortestDurationOfPossibleBetweenTwoCities(City fromCity, City toCity) {
